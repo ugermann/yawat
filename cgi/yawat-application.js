@@ -8,6 +8,7 @@ var yawat = document.createElement("div");
 var changed = false;
 var bitext =false;
 var saveDestination;
+var encoding;
 
 var pleaseWaitBox = document.createElement('div');
 pleaseWaitBox.id = 'pleaseWaitBox';
@@ -25,6 +26,7 @@ function BiText(id,title,data,prevSid,curSid,nextSid)
 {
    this.id      = id;
    this.div     = document.createElement("div");
+    // this.div.acceptCharset = encoding;
    this.toolbar = document.createElement("form");
    this.toolbar.method='POST';
    this.toolbar.action=url_index;
@@ -143,17 +145,25 @@ function BiText(id,title,data,prevSid,curSid,nextSid)
    
    var keepProtocolTemp = keepProtocol;
    keepProtocol=false;
+    var firstUnFinished = 0;
    for (var i in data)
    {
       var item = data[i];
-      if (item.length == 4)
-	 var p = new Pane(item[1],item[2],item[3],item[0]);
+      if (item.length == 5)
+	  var p = new Pane(item[2],item[3],item[4],item[0],item[1]);
       else
-	 var p = new Pane(item[1],item[2],item[3],item[0],item[4],item[5]);
+	  var p = new Pane(item[2],item[3],item[4],item[0],item[1],item[5],item[6]);
       this.panes[item[0]] = p;
       p.bitext = this;
-      this.body.appendChild(p.div);
+
+       // this.body.appendChild(anchor);
+       
+       this.body.appendChild(p.div);
+       if (firstUnFinished == 0 && !item[1])
+	   firstUnFinished = item[0];
    }
+
+    this.done = new Array(data.length,false);
 
    this.div.appendChild(this.toolbar);
    this.div.appendChild(this.body);
@@ -162,6 +172,8 @@ function BiText(id,title,data,prevSid,curSid,nextSid)
    this.saveButton.disable();
    keepProtocol=keepProtocolTemp;
    protocol("NEW SESSION");
+    if (firstUnFinished) 
+	window.location.hash = "atpane"+firstUnFinished;
 }
 
 BiText.prototype.toggleLayout = function()
@@ -201,7 +213,7 @@ BiText.prototype.save = function()
 				 'application/x-www-form-urlencoded');
    this.saveReq.onreadystatechange = function() 
    { 
-      if (self.saveReq.readyState == 4)
+     if (self.saveReq.readyState == 4)
       {
 	 if (bitext.timeout)
 	    window.clearTimeout(bitext.timeout);
@@ -211,29 +223,28 @@ BiText.prototype.save = function()
 	    window.status = 'Save sucessful';
 	    changed = false;
 	    bitext.saveButton.disable();
-	    theProtocol = '';
-	    var log = document.getElementById('log');
-	    if (log) log.value = '';
-	    alert("Data saved.");
+	     theProtocol = '';
+	     var log = document.getElementById('log');
+	     if (log) log.value = '';
+	     // alert("Data saved.");
 	 }
-	 else
-	 {
+	  else
+	  {
 	    alert("Data could not be saved!");
-	    alert(self.saveReq.responseText);
+	     alert(self.saveReq.responseText);
 	 }
       }
    }
  
+    var done = '';
+    for (var p in this.panes)
+	done += this.panes[p].id+':'+this.panes[p].done.checked+'+';
+    
    // and send the data:
    this.saveReq.send('text='+escape(this.id)+'&data='+dstring
-		     +'&protocol='+escape(theProtocol));
+		     +'&protocol='+escape(theProtocol)
+		     +'&done='+done);
    this.timeout = window.setTimeout("saveFailed()", 10000);
-   // var foo = 1;
-//    while (self.saveReq.readyState != 4 && self.timeout)
-//    {
-//       window.status = foo;
-//    }      
-   // alert (dstring);
 }
 
 function saveFailed()

@@ -4,7 +4,57 @@
 // software free of charge for academic research purposes.
 
 var currentPane;
-function Pane(E,F,A,id,extraA,extraB)
+
+function StatusButton(id,checked)
+{
+    this.checked = checked;
+    this.id      = id;
+    this.span    = document.createElement("span");
+    this.label   = document.createTextNode(" done")
+    var bspan    = document.createElement("span");
+    this.box     = document.createTextNode("")
+    bspan.appendChild(this.box);
+    this.span.appendChild(bspan);
+    this.span.appendChild(this.label);
+    bspan.style.cursor = 'pointer';
+
+    this.id = id+"done";
+    if (checked)
+	this.box.nodeValue = String.fromCharCode(parseInt(2611,16));
+    else
+	this.box.nodeValue = String.fromCharCode(parseInt(2610,16));
+    this.checked  = checked;
+    bspan.button = this;
+    bspan.onclick = function()
+    {
+	var msg = (this.button.checked 
+		   ? "Revert status to 'in progress'?" 
+		   : "Change status to 'done'?");
+	// if (window.confirm(msg))
+	// {
+	changed = true;
+	if (bitext) bitext.saveButton.enable();
+	this.button.box.nodeValue = String.fromCharCode(parseInt(this.button.checked 
+								 ? 2610 : 2611,16));
+	this.button.checked = !this.button.checked;
+	if (this.button.checked)
+	{
+	    var j = parseInt(id)+1;
+	    var n = document.getElementById("pane"+j);
+	    // alert(n + j);
+	    while (n && n.pane.done.checked) 
+	    {
+		++j;
+		n = document.getElementById("pane"+j);
+	    }
+	    if (n) window.location.hash="atpane"+j;
+	    if (bitext) bitext.save();
+	}
+    }
+}
+
+
+function Pane(E,F,A,id,done,extraA,extraB)
 {
    // contains Aligment Matrix and Sentence Display
    this.div = document.createElement("div");
@@ -38,7 +88,10 @@ function Pane(E,F,A,id,extraA,extraB)
    this.layout = 'vertical';
 
    var siddiv = document.createElement("div");
-   siddiv.appendChild(document.createTextNode(id));
+   siddiv.appendChild(document.createTextNode('['+id+'] '));
+   this.done = new StatusButton(id,done);
+   siddiv.appendChild(this.done.span);
+
    this.div.insertBefore(siddiv,this.div.firstChild);
 
    // create a button to toggle matrix display
@@ -89,6 +142,13 @@ function Pane(E,F,A,id,extraA,extraB)
       // alert(extraB);
       this.shadowAlignmentB = extraB;
    }
+    var a = document.createElement("anchor");
+    a.name = "atpane"+id;
+    a.id   = "atpane"+id;
+    a.style.position.relative;
+    a.style.paddingTop = "30px";
+    this.div.insertBefore(a,this.div.firstChild);
+    this.div.id = "pane"+id;
 }
 
 Pane.prototype.toggleMatrix = function()
@@ -174,5 +234,6 @@ Pane.prototype.pack = function()
 	 }
       }
    }
+   // retval += ' STATUS=' 
    return retval;
 }

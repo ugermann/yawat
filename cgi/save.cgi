@@ -64,6 +64,13 @@ if ($q->param('protocol'))
     open  PROTOCOL, ">>$datadir/$annotator/$text.log" or die "$!";
     print PROTOCOL $q->param('protocol');
     close PROTOCOL;
+    # utime(undef, undef, "$datadir/$annotator/$text.log");
+  }
+
+if ($q->param('done'))
+  {
+    open STATUS, ">$datadir/$annotator/$text.done";
+    print STATUS $q->param('done'), "\n";
   }
 
 print $q->header;

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # Part of YAWAT -- Yet Another Word Aligment Tool
-# (c) 2007-2009 Ulrich Germann; all rights reserved
+# (c) 2007-2013 Ulrich Germann; all rights reserved
 
 # This is NOT free software, but permission is granted to use this 
 # software free of charge for academic research purposes.
@@ -19,6 +19,7 @@
 use strict;
 use Fcntl;
 use File::Basename;
+use Date::Format;
 
 our %CFG;
 
@@ -61,17 +62,17 @@ BEGIN
   use CGI qw(:standard);
 }
 
+my $q         = new CGI;
+my %done;
 # $recloc can be used to obtain the js file from a different location,
 # e.g., 
-# my $recloc = "http://".$q->server_name()."/~germann/yawat";
-my $recloc = "";
-
-my $q         = new CGI;
+#my $recloc = "http://".$q->server_name()."/~germann/demo/yawat/";
+my $recloc = "http://yawat.statmt.org/";
 my $annotator = $q->cookie('yawat-login');
 my $login     = $q->param('login');
 
 if ($q->param('logout')
-    or (-r ".htaccess" and not $q->remote_user())
+    #or (-r ".htaccess" and not $q->remote_user())
     or !($annotator or $login))
 {
   &print_login_screen;
@@ -91,7 +92,7 @@ if (!$annotator)
   foreach my $line (<PASSWD>)
   {
     chomp $line;
-    my ($who,$pw) = split / +/, $line;
+    my ($who,$pw) = split /:/, $line;
     next if ($who ne $login || crypt($q->param('passwd'),$pw) ne $pw);
     $cookie = $q->cookie(-name=>"yawat-login", -value=>"$login");
     last;
@@ -117,10 +118,13 @@ $diffMode     = "false" unless $diffMode;
 $keepProtocol = "true"  unless $keepProtocol;
 
 
-my $self    = $q->url();
+my $this_script = $recloc; # $q->url();
+$this_script .= "yawat.cgi" 
+    unless $this_script =~ /(yawat|index)\.cgi$/;
+
 my $text    = $q->param('text');
 my $datareq = $q->param('getdata');
-my $path    = dirname($self);
+my $path    = dirname($this_script);
 my $subdir  = $q->param('subdir');
 my (@files,@sdirs);
 
@@ -156,7 +160,7 @@ sub print_login_screen()
   print "<head>\n";
   print "<style type=\"text/css\">\n";
   print "<!--\n";
-  print ".logo { font-size: 30pt; weight: bold; padding: 0pt; margin: 0pt }\n";
+  print ".logo { font-size: 30pt; font-weight: bold; padding: 0pt; margin: 0pt }\n";
   print ".marked { position:relative; color: red;\n";
   print "          text-align: center; display:inline-block; }\n";
   print ".nomark { position: relative; color: black; text-align: left;\n";
@@ -166,7 +170,7 @@ sub print_login_screen()
   print "</head>\n";
   print "<body>\n";
   print "<div align=center>\n";
-  print "<form method=POST action='",$q->url(),"'>\n";
+  print "<form method=POST action='$this_script'>\n";
   foreach my $field ('text','subdir')
   {
     if ($q->param($field))
@@ -178,7 +182,7 @@ sub print_login_screen()
 
   my $authorship=("<div class=nomark style=\"font-size: 8pt; ".
 		  "color: gray; width: 150pt;\">".
-		  "Version 1.1<br>&copy; 2006-2010<br>Ulrich Germann.</div>");
+		  "Version 1.2<br>&copy; 2006-2013<br>Ulrich Germann.</div>");
   
   print "<tr><td></td>";
   print "<td align=left style=\"text-align:left;\">";
@@ -222,6 +226,9 @@ sub print_login_screen()
   print "</form>\n";
   print "</div>\n";
   print "</table>\n";
+
+  print "<p style='position:fixed; bottom:1ex;'></p>\n";
+
   print "</body>\n";
   print "</html>\n";
 }
@@ -231,44 +238,65 @@ sub print_index
   print $q->header({ -cookie=>$cookie,
 		     -'cache-control'=>'no-cache'});
 
-  my $logoutbutton = "<form action=$self method=POST>";
+  my $logoutbutton = "<form action=$this_script method=POST>";
   my $logoutbutton = "<input type=submit name=logout value='log out'>";
   
   print "<html>\n<body>";
-  print "<form action=$self method=POST>";
+  print "<form action=$this_script method=POST>";
   print "<h1>Index (for $annotator) $logoutbutton</h1>\n";
   print "</form>\n";
 
-  print "<table cellpadding=5>\n";
+  print "<p>";
   if ($subdir)
   {
     my $updir = dirname($subdir);
     if ($updir ne ".")
     {
-      print "<tr><td><a href=$self?subdir=$updir>..</td></tr>\n";
-    } else
+      print "<a href=$this_script?subdir=$updir>..<br>\n";
+    }
+    else
     {
-      print "<tr><td><a href=$self>..</td></tr>\n";
+      print "<a href=$this_script>..<br>\n";
     }
   }
   foreach my $d (@sdirs)
   {
-    print "<tr><td><a href=$self?subdir=$d>$d</td></tr>\n";
+      print "<a href=$this_script?subdir=$d>$d<br>\n";
   }
+  print "</p>";
+
+  print "<table cellpadding=5 border=1>\n";
+
+  print "<tr>";
+  print "<th>file</th>";
+  print "<th>completed</th>";
+  print "<th>last edit</th>";
+  print "</tr>\n";
   foreach my $file (@files)
   {
     my $xsd = $subdir;
-    if ($xsd)
-    {
-      $xsd .= "/" unless $xsd =~ /\/$/;
-    }
-    print "<tr><td><a href='$self?text=$xsd$file'>$file</a></td>\n";
+    if ($xsd) { $xsd .= "/" unless $xsd =~ /\/$/; }
+    my ($d,$t) = completion_rate("$datadir/$annotator/$xsd$file.done");
+    print "<tr>";
+    print "<td><a href='$this_script?text=$xsd$file'>$file</a></td>\n";
+    print "<td>$d", $t ? "/$t" : "", "</td>\n";
     print "<td>";
-    if (-e "$datadir/$annotator/$xsd$file.aln")
+    if (-e "$datadir/$annotator/$xsd$file.log")
     {
-      print "<a href=$self?getdata=$xsd$file>alignment data</a>";
+	my $t = (stat "$datadir/$annotator/$xsd$file.log")[9];
+	print time2str("%a, %e %b %Y, %R %Z (%z)", $t), "\n";
     }
-    print "</td></tr>\n";
+    elsif (-e "$datadir/$annotator/$xsd$file.aln")
+    {
+	my $t = (stat "$datadir/$annotator/$xsd$file.aln")[9];
+	print time2str("%a, %e %b %Y, %R %Z (%z)", $t), "\n";
+    }
+    print "</td>\n";
+    #print "<td>";
+    #if (-e "$datadir/$annotator/$xsd$file.aln")
+    #{ print "<a href=$this_script?getdata=$xsd$file>alignment data</a>"; }
+    #print "</td>\n";
+    print "</tr>\n";
   }
   print "</table></body></html>\n";
 }
@@ -286,7 +314,7 @@ sub print_alignment_data
 
 sub include_css
 {
-  my $rloc = ($recloc ? $recloc : dirname($self));
+  my $rloc = ($recloc ? $recloc : dirname($this_script));
   $rloc =~ s/\/$//;
   my $ret;
   foreach my $css (@_)
@@ -303,6 +331,34 @@ sub pkgsnt # "package sentence"
   return "['".join("','",@x)."']";
 }
 
+sub completion_rate
+{
+    my $src = $_[0];
+    if (!-e $src) { return (0,0); }
+    open IN, $src or die "$src: $!\n";
+    my $line = (<IN>); chomp $line;
+    my @s = grep !/^$/, split(/ +/, $line);
+    my $total = scalar(@s);
+    my $done  = 0;
+    for (@s) { $done++ if m/true$/; }
+    return ($done,$total);
+}
+
+sub read_status_info
+{
+    my ($S, $src) = @_;
+    return unless -e $src;
+    open IN, $src or die "$src: $!\n";
+    my $line = (<IN>);
+    chomp $line;
+    my @s = grep !/^$/, split(/ +/, $line);
+   foreach my $token (@s)
+    {
+	my ($k,$v) = split /:/, $token;
+	$$S{$k} = $v;
+    }
+}
+
 sub print_task
 {
   my ($prevFile,$nextFile);
@@ -314,14 +370,14 @@ sub print_task
       $nextFile = $files[$i+1] if $i < $#files;
     }
   }
-  my (%E,%F,%A,%X1,%X2);
+  my (%E,%F,%A,%X1,%X2, %S);
   my $alnfile = "$datadir/$annotator/$text.aln";
   my $roMode = !(-W "$alnfile") || $CFG{"allowEdit"} eq "false";
   &get_bitext(\%E,\%F,"$datadir/$annotator/$text.crp");
   read_alninfo(\%A,$alnfile);
   read_alninfo(\%X1,"$alnfile.1") if -e "$alnfile.1";
   read_alninfo(\%X2,"$alnfile.2") if -e "$alnfile.2";
-
+  read_status_info(\%S,"$datadir/$annotator/$text.done");
   print $q->header({'-charset'      => "$CFG{'encoding'}",
 		    '-cache-control'=> 'no-cache',
 		    '-pragma'       => 'no-cache'});
@@ -337,42 +393,55 @@ sub print_task
 		 "yawat-button.js");
   print "<script type=\"text/javascript\">\n";
   print "var data = new Array()\n";
+  my $target = undef;
   foreach my $k (sort { $a <=> $b } keys(%E))
   {
+    if ($S{$k} ne "true" && not defined $target) { $target = $k; }
     if ($X1{$k} || $X2{$k})
     {
-      print sprintf("data.push(['%s',%s,%s,'%s','%s','%s']);\n",
-		    $k,pkgsnt($E{$k}),pkgsnt($F{$k}),$A{$k},$X1{$k},$X2{$k});
+      print sprintf("data.push(['%s',%s,%s,%s,'%s','%s','%s']);\n",
+		    $k,$S{$k},pkgsnt($E{$k}),pkgsnt($F{$k}),
+		    $A{$k},$X1{$k},$X2{$k});
     } 
     else
     {
-      print sprintf("data.push(['%s',%s,%s,'%s']);\n",
-		    $k,pkgsnt($E{$k}),pkgsnt($F{$k}),$A{$k});
+      print sprintf("data.push(['%s',%s,%s,%s,'%s']);\n",
+		    $k,$S{$k},pkgsnt($E{$k}),pkgsnt($F{$k}),$A{$k});
     }
   }
   my $sdir = dirname($text);
   $sdir = "" if $sdir eq "./";
-  print "url_index = '",$q->url(),($sdir ? "?subdir=$sdir" : ""), "';\n";
+  print "url_index = '",$this_script,($sdir ? "?subdir=$sdir" : ""), "';\n";
   if ($prevFile)
   {
-    print "url_prev='$self?text=$prevFile';\n";
+    print "url_prev='$this_script?text=$prevFile';\n";
   }
   if ($nextFile)
   {
-    print "url_next='$self?text=$nextFile';\n";
+    print "url_next='$this_script?text=$nextFile';\n";
   }
   print "diffMode=$diffMode;\n";
   print "keepProtocol=$keepProtocol;\n";
   print "annotatorName=\"$annotator\";\n";
 
+  print "encoding = \"$CFG{'encoding'}\";\n";
   print "bitext = new BiText('$text','$text',data);\n";
   print "document.body.appendChild(bitext.div);\n";
   print "saveDestination='$path/save.cgi';\n";
   print "readOnlyMode=",($roMode ? "true;\n" : "false;\n");
+  print "window.location.hash=\"atpane$target\";\n";
   print "</script>\n";
 
   print "</body>\n</html>\n";
 }
+
+sub tasksort
+  {
+    if ($done{$a} == $done{$b}) { return $a cmp $b; }
+    if ($done{$a} == 1)         { return  1; }
+    if ($done{$b} == 1)         { return -1; }
+    return $done{$b} <=> $done{$a};
+  }
 
 sub process_annotator_directory
 {
@@ -388,11 +457,14 @@ sub process_annotator_directory
     }
   }
   
-  @files = sort(grep /\.crp$/, @cands);
+  @files = grep /\.crp$/, @cands;
   for (@files)
   {
     s/\.crp//;
+    my ($d,$t) = completion_rate("$xdir/$_.done");
+    $done{$_} = $t ? $d/$t : 0;
   }
+  @files = sort tasksort @files;
 }
 
 sub get_bitext
