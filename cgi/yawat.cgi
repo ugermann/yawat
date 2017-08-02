@@ -67,7 +67,9 @@ my %done;
 # $recloc can be used to obtain the js file from a different location,
 # e.g., 
 #my $recloc = "http://".$q->server_name()."/~germann/demo/yawat/";
-my $recloc = "http://yawat.statmt.org/";
+# my $recloc = "http://data.statmt.org/yawat";
+my $recloc = ($CFG{"URL"} or dirname($q->url()));
+$recloc .= "/" unless $recloc =~ /\/$/;
 my $annotator = $q->cookie('yawat-login');
 my $login     = $q->param('login');
 
