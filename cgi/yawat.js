@@ -1,3 +1,4 @@
+// -*- mode: javascript; indent-tabs-mode: nil; tab-width: 2 -*-
 // This file is part of the YAWAT package.
 // (c) 2007 Ulrich Germann. All rights reserved.
 // This is NOT free software, but permission is granted to use this 
@@ -22,7 +23,7 @@ var leftMouseButton  = Netscape ? 1 : 1;
 var rightMouseButton = Netscape ? 3 : 2;
 // Opera codes to be added 
 
-
+var SHIFT_key = 16;
 
 var AlignmentProtocol;
 
@@ -36,11 +37,43 @@ window.oncontextmenu = function() { return false; }
 window.onresize = onWindowResize;
 window.onmousemove = function()
 {
-   if (recentHighlight)
-   {
-      recentHighlight.unhighlight();
-      recentHighlight = null;
-   }
+    if (recentHighlight)
+    {
+        recentHighlight.unhighlight();
+        recentHighlight = null;
+    }
+}
+
+var isDown = new Object();
+window.onkeydown = function(e)
+{
+    if (!e) e = windown.event;
+    if (e.keyCode in isDown) ++isDown[e.keyCode];
+    else isDown[e.keyCode] = 1;
+    if (e.keyCode == DEL_key)
+    {
+        var x = document.getElementById('log');
+        if (x) x.value='';
+
+    }
+    if (e.keyCode == ESC_key)
+    {
+        if (currentCTM)
+            cancelOpenContextMenus(null);
+        else if (activeLayer.seln.length)
+            activeLayer.popSeln();
+        return false;
+    }
+    else
+    {
+        log('key down event:' + e.keyCode);
+    }
+}
+
+window.onkeyup = function(e)
+{
+    if (!e) e = windown.event;
+    --isDown[e.keyCode];
 }
 
 // Important note about event handling: I do it top-down, with a 
@@ -72,7 +105,7 @@ function handleClick(evt)
    if (!evt) evt = window.event; // IE 
    var target    = evt.target ? evt.target : evt.srcElement; // Netscape vs. IE
    var button    = evt.which  ? evt.which  : evt.button;     // Netscape vs. IE
-
+    
    if (activeGroup && !(target.word && target.word.pane == activeGroup.pane))
    {
       protocol("cancel edit");
@@ -91,25 +124,27 @@ function handleClick(evt)
    else if (target.word)
    {
        if (readOnlyMode)
-	   return false; // do nothing
-      if (!readOnlyMode && button == leftMouseButton) 
-	 handleLeftClickOnWord(target.word);
-      else 
-	 handleRightClickOnWord(target,getMouseX(evt),getMouseY(evt));
+           return false; // do nothing
+       if (button == rightMouseButton || isDown[SHIFT_key])
+	         handleRightClickOnWord(target,getMouseX(evt),getMouseY(evt));
+       else 
+	         handleLeftClickOnWord(target.word);
       evt.stopPropagation();
    }
    else if ('col' in target && 'row' in target)
    {
-      if (readOnlyMode)
-	return false; // do nothing
-      if (button == leftMouseButton) 
-      {
-	 window.status = 'left click on cell';
-	 handleLeftClickOnCell(target);
-      }
-      else 
-	 handleRightClickOnCell(target,getMouseX(evt),getMouseY(evt));
-      evt.stopPropagation();
+       if (readOnlyMode)
+	         return false; // do nothing
+       if (button == rightMouseButton || isDown[SHIFT_key]) 
+       {
+	         handleRightClickOnCell(target,getMouseX(evt),getMouseY(evt));
+       }
+       else
+       {
+           window.status = 'left click on cell';
+	         handleLeftClickOnCell(target);
+       }
+       evt.stopPropagation();
    }
    return false;
 }
