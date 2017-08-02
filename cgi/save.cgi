@@ -12,12 +12,32 @@
 
 BEGIN
 {
+  our %CFG;
+  
+  sub readConfigFile
+  {
+    open CFGFILE, "$_[0]" or die "$_[0]: $!\n";
+    while (my $line = <CFGFILE>)
+    {
+      next if $line =~ m/^\s*#/;
+      chomp $line;
+      my ($key,$value) = split(/\s*=\s*/, $line);
+      $CFG{$key} = $value;
+    }
+    close CFGFILE;
+  }
+
+  # read config file yawat.cfg to get error log file name
+  readConfigFile("yawat.cfg");
+  my $errorlog = ($CFG{"errorLog"} or "yawat.errors.log");
+  
   use File::Basename;
   no strict "subs";
   use CGI::Carp qw(fatalsToBrowser carpout);
-  open ERRORS, ">>yawat.errors.log" 
-    or open ERRORS, ">>../../logs/yawat.errors.log" 
-      or die "$!\n";
+  open ERRORS, ">>$errorlog"
+    or open ERRORS, ">>yawat.errors.log"
+    or open ERRORS, ">>../../logs/yawat.errors.log"
+    or die "$!\n";
   carpout(ERRORS); # put error messages in "errors.log"
   use CGI qw(:standard);
 }
