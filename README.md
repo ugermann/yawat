@@ -122,3 +122,20 @@ subtle coloring scheme. Contrasts that are too strong are distracting.
   disallow editing for a 'view-only' user.
 
 - The tool now properly handles subdirectories in annotator directories.
+
+# Acknowledging Yawat
+
+Please cite the following paper
+```
+@InProceedings{germann:2008:ACLDemos,
+  author    = {Germann, Ulrich},
+  title     = {{Yawat:} {Yet} {Another} {Word} {Alignment} {Tool}},
+  booktitle = {Proceedings of the ACL-08: HLT Demo Session},
+  month     = {June},
+  year      = {2008},
+  address   = {Columbus, Ohio},
+  publisher = {Association for Computational Linguistics},
+  pages     = {20--23},
+  url       = {http://www.aclweb.org/anthology/P/P08/P08-4006}
+}
+```
