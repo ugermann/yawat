@@ -169,7 +169,7 @@ function labelGroup(wrd,label)
 
 function ungroupAll(group)
 {
-   protocol("dissolve " + ag.descriptor());
+   protocol("dissolve " + group.descriptor());
    for (var w in group.side[0])
    {
       var wrd = group.side[0][w];
