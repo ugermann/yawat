@@ -363,6 +363,9 @@ sub read_status_info
 
 sub print_task
 {
+  my $localcfgfile = dirname("$datadir/$annotator/$text.aln")."/yawat.cfg";
+  readConfigFile($localcfgfile) if -e $localcfgfile;
+
   my ($prevFile,$nextFile);
   for (my $i=0; $i <= $#files; $i++)
   {
