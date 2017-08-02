@@ -3,7 +3,7 @@
 { 
   display:          inline; 
   cursor:           default; 
-  min-width:        20; 
+  min-width:        20px; 
 
   border-width:     medium;
   border-style:     solid;
