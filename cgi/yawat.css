@@ -1,0 +1,257 @@
+/* (c) 2007 Ulrich Germann. All rights reserved. */
+.yawatHeader, .yawatFooter {
+    position: fixed;
+    display: block;
+    overflow: visible;
+    background-color: #000099;
+    font-size: 10pt;
+    width: 100%;
+    border-bottom: thin solid black;
+    color: yellow;
+    z-index: 100;
+    right: 0
+}
+
+.yawatHeader {
+    top: 0;
+}
+
+.yawatFooter {
+    bottom: 0;
+}
+
+.sentence1 {
+    color: blue;
+    background-color: #fffacd;
+}
+
+td.sentence1 {
+    text-align: right;
+    vertical-align: top;
+    border: thin solid black;
+}
+
+div.sentence1 {
+    text-align: left;
+}
+
+.sentence2 {
+    color: red;
+    background-color: #f0f8ff;
+}
+
+td.sentence2 {
+    vertical-align: top;
+    border: thin solid black;
+}
+
+div.CTM {
+    visibility: hidden;
+    position: absolute;
+    background-color: #DDDDDD;
+    display: block;
+    padding: 5;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 8pt;
+    z-index: 2;
+    border: thin solid black;
+}
+
+div.ctmItem {
+    background-color: #DDDDDD;
+}
+
+div.ctmItem:hover {
+    background-color: #EEEEEE;
+}
+
+table.amatrix {
+    border-collapse: collapse; /*border: thin solid blue; */
+    background-color: transparent;
+    padding: 0;
+}
+
+tr.amatrix {
+    background-color: #FFFFFF;
+    color: black;
+    margin: 0px;
+    padding: 0px;
+    border-width: 0pt;
+}
+
+tr.amatrix:hover {
+    background-color: #FFFF99;
+    color: red;
+    overflow: visible;
+    vertical-align: middle;
+}
+
+td.amatrix {
+    padding: 0pt;
+    margin: 0pt;
+    border-width: 1px;
+    border-style: solid;
+    border-color: gray;
+}
+
+div.navButton {
+    background-color: transparent;
+    color: inherit;
+    position: relative;
+    overflow: visible;
+    margin: 1px;
+    border: thin solid black;
+    font-weight: bold;
+    display: inline;
+}
+
+div.navButtonDisabled {
+    background-color: #000099;
+    color: #DDDDDD;
+    position: relative;
+    overflow: visible;
+    margin: 0px;
+    border: thin solid white;
+    font-weight: bold;
+    display: inline;
+}
+
+div.on {
+    background-color: black;
+    border: thin solid black;
+}
+
+div.AandMe { 
+    background-color: #000000;
+    border: thin solid #6666FF;
+}
+
+div.BandMe { 
+    background-color: #000000;
+    border: thin solid #FF0000;
+}
+
+div.onlyA {
+    background-color: #AAAAFF;
+    border: thin solid #AAAAFF;
+}
+
+div.onlyB {
+    background-color: #FFAAAA;
+    border: thin solid #FFAAAA;
+}
+
+div.onlyMe {
+    background-color: #000000;
+    border: thin solid #FFFF00;
+}
+
+div.AandB {
+    background-color: #AAAAFF;
+    border: thin solid #FF0000;
+}
+
+div.off {
+    background-color: transparent;
+	background-color: transparent;
+    border: thin solid transparent;
+}
+
+div.grid:hover {
+    border-color: magenta;
+}
+
+td.grid {
+    vertical-align: top;
+}
+
+div.ruler {
+    background-color: #EEEEEE;
+    position: absolute;
+}
+
+div.dot {
+    position: absolute;
+    display: block;
+    background-color: black;
+}
+
+.on, .onHL, .off, .offHL {
+    position: relative;
+    overflow: visible;
+}
+/* div.off   { background-color: #EEEEEE; } */
+/* .on,.onHL { background-color: black; }  */
+td.off {
+    background-color: #D0D0D0;
+}
+
+.margin {
+    background-color: transparent;
+    color: black;
+    overflow: visible;
+    position: relative;
+    vertical-align: middle;
+    margin: 0px;
+    border: .05em solid white;
+}
+
+.marginHL {
+    background-color: #EEEEEE;
+    color: black;
+    overflow: visible;
+    position: relative;
+    vertical-align: middle;
+    margin: 0px;
+    border: .05em solid white;
+}
+/* div.rowTag  */
+/* {  */
+/*   background-color: transparent; */
+/*   color: red; */
+/*   position: absolute; */
+/*   font-size: 6pt; */
+/*   display: block; */
+/*  } */
+/* div.colTag  */
+/* {  */
+/*   background-color: #EEEEEE; */
+/*   color: black; */
+/*   position: absolute; */
+/*   overflow: visible; */
+/*   text-align: center; */
+/*  } */
+div.marginButton {
+    color: black;
+    background-color: transparent;
+    font-size: 14pt;
+    display: block;
+    visibility: visible;
+    margin-left: -20;
+    height: 0;
+    overflow: visible;
+}
+
+div.marginButton:hover {
+    background-color: #DDDDDD;
+    color: blue;
+}
+
+div.pane {
+    margin: 10;
+    margin-left: 30;
+    margin-right: 30
+}
+
+#pleaseWaitBox {
+    display: none;
+    visibility: hidden;
+    z-index: 10;
+    color: black;
+    background-color: yellow;
+    border: thin solid black;
+    padding: 10;
+    position: fixed;
+}
+

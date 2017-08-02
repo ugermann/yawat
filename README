@@ -1,13 +1,26 @@
-# YAWAT (Yet Another Word Alignment Tool) 
-
-YAWAT (Yet Another Word Alignment Tool)is a web application for manual
+YAWAT (Yet Another Word Alignment Tool) is a web application for
 word alignment of parallel corpora.
 
 (c) 2007-2010 Ulrich Germann; all rights reserved.
 
-This software is under the [GNU Affero General Public License v3.0](LICENSE)
+This software is under dual license.
 
-# INSTALLATION
+I. Permission to use this software free of charge is granted for academic
+reserach purposes. All changes to this software made under the academic
+license must be released as open source and be made available freely for 
+academic research purposes.
+
+II. Commercial use requires a separate license. Use of this software as
+part of a web service that makes money in any form (e.g. by
+advertisements on the page) constitutes commercial use. So does use of
+this software for producing word alignments that will not be released
+for use either free of charge or for a merely nominal fee to cover
+shipping cost. If you are interested in using this software
+commercially, contact the author at ulrich.germann@gmail.com.
+
+-------------------------------------------------------------------------- 
+
+INSTALLATION
 
 1. You need two directories: One .cgi-enabled directory under your web
    server's document root, and a directory for your data.
@@ -48,12 +61,11 @@ This software is under the [GNU Affero General Public License v3.0](LICENSE)
    the directory sample-data):
 
    1. A .crp file with three lines per sentence pair:
-      ```
+
       <sentence id>
       <sentence in language 1>
       <sentence in language 2>
-      ```
-      
+
    2. A .aln file with alignment data. For each sentence pair, there
       is one lineconsisting of the sentence id followed by entries defining 
       groups of aligned words:
@@ -61,9 +73,7 @@ This software is under the [GNU Affero General Public License v3.0](LICENSE)
  
       E.g.:
 
-      ```
       7 0,1,2:3:unspec 3:1:unspec :2:omitted
-      ```
 
       This means that the first three words in language 1 (L1) in
       sentence 7 are aligned with the forth word (index position 3) in
@@ -84,7 +94,7 @@ This software is under the [GNU Affero General Public License v3.0](LICENSE)
    (Edit - Preferences - ("Content" tab) - "Advanced" next to Javascript) 
 
 
-# CUSTOMIZATION
+CUSTOMIZATION
 
 The tag set for labeling alignment relations is customizable. For
 customization, you need to edit the two files yawat-tagset.js and
@@ -102,7 +112,7 @@ div.tagM:hover: highlighted representation in the context menu
 Spend some time, thought and experimentation to come up with a good,
 subtle coloring scheme. Contrasts that are too strong are distracting.
 
-# NEW FEATURES (2008)
+NEW FEATURES (2008)
 
 - Alignment diffing: you can specify up to three different alignments
   for comparison. At most one is editable; the other ones are for

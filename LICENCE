@@ -1,0 +1,47 @@
+                 YAWAT LICENSING TERMS FOR ACADEMIC USE
+
+Yawat (Yet Another Word Alignment Tool) is a tool for the manual
+creation of word alignments of parallel text. This document covers the
+terms and conditions for ACADEMIC USE between you, the lincensee, and
+the author of Yawat, Ulrich Germann, the licensor. By using Yawat, you
+acknowledge and agree to the following terms and conditons.
+
+1. Yawat comes without any warranty or guarantee whatsoever. You use
+   it entirely at your own risk and agree to hold the licensor
+   harmless against all liability and obligations that could arise out
+   of your use of the software, including expenses and reasonable
+   counsel fees.
+
+2. While open source software, Yawat is protected by copyright.
+   Permission is granted to use Yawat free of charge for academic
+   research. You are not allowed to distribute it beyond the extent
+   necessary to perform word alignments. This means that you are
+   allowed to deliver the underlying JavaScript files through a web
+   browser to annotators, but you are not allowed to distribute the
+   Yawat package (e.g., a tarball) to third parties.
+
+3. You are allowed to make changes to and produce derivative works
+   from Yawat, but you are required to grant to the liconsor a
+   royalty-free, non-revocable, permanent licence to use and
+   distribute such derivative works, including for commercial use and
+   licensing. All derivative work must clearly name Yawat as the
+   source and include a proper copyright notice (i.e., (c) 2006-2010
+   Ulrich Germann).
+
+4. This licence covers only use for academic research. All other use,
+   especially commercial use, requires a separate licence agreement.
+
+5. In publications, please acknowledge the use of Yawat by citing the
+   following paper:
+
+   @InProceedings{germann:2008:ACLDemos,
+   author    = {Germann, Ulrich},
+   title     = {{Yawat:} {Yet} {Another} {Word} {Alignment} {Tool}},
+   booktitle = {Proceedings of the ACL-08: HLT Demo Session},
+   month     = {June},
+   year      = {2008},
+   address   = {Columbus, Ohio},
+   publisher = {Association for Computational Linguistics},
+   pages     = {20--23},
+   url       = {http://www.aclweb.org/anthology/P/P08/P08-4006}
+   }

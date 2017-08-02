@@ -1,0 +1,94 @@
+/* (c) 2007 Ulrich Germann. All rights reserved. */
+.word 
+{ 
+  display:          inline; 
+  cursor:           default; 
+  min-width:        20; 
+
+  border-width:     medium;
+  border-style:     solid;
+  border-color:     transparent;
+
+  color:            inherit;
+  background-color: transparent;
+
+  font-size:        16pt;
+  }
+
+div.menuItem
+{ 
+  border: none;
+  cursor: pointer;
+ }
+
+
+.unaligned2          { background-color: #DDDDDD; }
+.unaligned3          { background-color: #DDDDDD; border-color: blue; }
+div.unalignedM       { background-color: #DDDDDD; color: red;}
+div.unalignedM:hover { background-color: #EEEEEE; } 
+
+.unspec1             { color: #AAAAAA; } 
+.unspec2             { background-color: #ffff00; } 
+.unspec3             { background-color: #ffff00; border-color: #666600; }
+div.unspecM          { background-color: #cccc00; }
+div.unspecM:hover    { background-color: #ffff66; }
+
+.literal1            { color: #666666; } 
+.literal2            { background-color: #ffff66; } 
+.literal3            { background-color: #ffff66; border-color: #666666; }
+div.literalM         { background-color: #cccc66; }
+div.literalM:hover   { background-color: #ffffAA; }
+
+
+
+
+.funcEquiv1          { color: gray; }
+.funcEquiv2          { color: black; background-color: #ddff00; }
+.funcEquiv3          { color: black; background-color: #ddff00; border-color: #666600; }
+div.funcEquivM       { color: black; background-color: #aacc00; }
+div.funcEquivM:hover { color: black; background-color: #ddff66; }
+
+
+
+
+.duplicate1           { color: gray;    background-color: transparent; border: medium solid transparent; } 
+.duplicate2           { color: black;   background-color: #ffdd00;     border: medium solid transparent; }
+.duplicate3           { color: black;   background-color: #ffdd00;     border: medium solid #666600; }
+div.duplicateM           { color: black;   background-color: #ccaa00;     border: none; }
+div.duplicateM:hover     { color: black;   background-color: #ffdd66;     border: none;}
+
+
+.nonliteral1        { color: #666699; background-color: transparent; border: medium solid transparent; }
+.nonliteral2        { color: black;   background-color: #ccccff;     border: medium solid transparent; }
+.nonliteral3        { color: black;   background-color: #ccccff;     border: medium solid #000099; }
+div.nonliteralM        { color: black;   background-color: #aaaadd;     border: none; }
+div.nonliteralM:hover  { color: black;   background-color: #00bfff;     border: none; }
+
+.coreference1 {  color: #669966; background-color: transparent; border: medium solid transparent; }
+.coreference2 {  color: black; background-color: #c1ffc1; border: medium solid transparent; }
+.coreference3 {  color: black; background-color: #c1ffc1; border: medium solid #006600; }
+div.coreferenceM       {  color: black; background-color: #c1ffc1; border: none; }
+div.coreferenceM:hover {  color: black; background-color: #ddffdd; border: none; }
+
+.focus2      {  color: black; background-color: #FFFFFF;   border: medium solid blue;}
+.focus3      {  color: black; background-color: pink;      border: medium solid blue; }
+
+.extra1       {  color: #eedd82; background-color: transparent; border: medium solid transparent; }
+.extra2       {  color:   black; background-color:     #eedd82; border: medium solid transparent; }
+.extra3       {  color: #eedd82; background-color: transparent; border: medium solid transparent; }
+div.extraM       {  color: black; background-color: #ccbb60; border: medium solid transparent; }
+div.extraM:hover {  color: black; background-color: #eedd82; border: medium solid transparent; }
+
+.synsugar1       {  color: #CCF; background-color: transparent; border: medium solid transparent; }
+.synsugar2       {  color: black; background-color:       #CCF; border: medium solid transparent; }
+.synsugar3       {  color: #CCF; background-color: transparent; border: medium solid transparent; }
+div.synsugarM       {  color: black; background-color: #99F; border: medium solid transparent; }
+div.synsugarM:hover {  color: black; background-color: #BBF; border: medium solid transparent; cursor: pointer; }
+
+.sideA2         { color: black;     background-color: #DDDDDD;  border: medium solid transparent;}
+.sideA3         { color: black;     background-color: #DDDDDD;  border: medium solid magenta;}
+
+.sideB2         { color: black;     background-color: #eee8aa;  border: medium solid transparent;}
+.sideB3         { color: black;     background-color: #eee8aa;  border: medium solid magenta;}
+
+
