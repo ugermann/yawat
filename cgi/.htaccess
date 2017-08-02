@@ -1,0 +1,10 @@
+Options ExecCGI
+AddHandler cgi-script .cgi
+DirectoryIndex yawat.cgi
+# AuthType Basic
+# AuthName "Yawat Word Alignment Tool"
+# AuthUserFile /raid0/www/htpasswd/data.statmt.org/restricted/htpasswd
+# Require valid-user
+# AllowOverride All
+# Order deny,allow
+# Allow from all
