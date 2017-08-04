@@ -9,14 +9,42 @@
 # This script handles document delivery or prints an 
 # index if no document is requested.
 
+
 BEGIN
 {
   use File::Basename;
   no strict "subs";
   use CGI::Carp qw(fatalsToBrowser carpout);
-  open ERRORS, ">>report.errors.log" 
-    or open ERRORS, ">>../../logs/report.errors.log" 
-      or die "$!\n";
+
+  sub readConfigFile
+  {
+    open CFGFILE, "$_[0]" or die "$_[0]: $!\n";
+    while (my $line = <CFGFILE>)
+    {
+      next if $line =~ m/^\s*#/;
+      chomp $line;
+      my ($key,$value) = split(/\s*=\s*/, $line);
+      $CFG{$key} = $value;
+    }
+    close CFGFILE;
+  }
+
+  # read config file yawat.cfg to get error log file name
+  readConfigFile("yawat.cfg");
+
+  # open error log
+  my $errorlog = ($CFG{"errorLog"} or "yawat.errors.log");
+  if (-e $errorlog and !-w $errorlog)
+  {
+    die "File '$errorlog' exists but is not writable\n";
+  }
+  elsif (!-e $errorlog and !-w dirname($errorlog))
+  {
+    die sprintf("Can't create file '%s' in '%s/'\n",
+	      $errorlog,dirname($errorlog));
+  }
+  open ERRORS, ">>$errorlog" 
+    or die ("Could not open error log file '$errorlog': $!\n");
   carpout(ERRORS); # put error messages in "errors.log"
   use CGI qw(:standard);
 }
