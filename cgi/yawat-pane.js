@@ -20,36 +20,36 @@ function StatusButton(id,checked)
 
     this.id = id+"done";
     if (checked)
-	this.box.nodeValue = String.fromCharCode(parseInt(2611,16));
+	      this.box.nodeValue = String.fromCharCode(parseInt(2611,16));
     else
-	this.box.nodeValue = String.fromCharCode(parseInt(2610,16));
+	      this.box.nodeValue = String.fromCharCode(parseInt(2610,16));
     this.checked  = checked;
     bspan.button = this;
     bspan.onclick = function()
     {
-	var msg = (this.button.checked 
-		   ? "Revert status to 'in progress'?" 
-		   : "Change status to 'done'?");
-	// if (window.confirm(msg))
-	// {
-	changed = true;
-	if (bitext) bitext.saveButton.enable();
-	this.button.box.nodeValue = String.fromCharCode(parseInt(this.button.checked 
-								 ? 2610 : 2611,16));
-	this.button.checked = !this.button.checked;
-	if (this.button.checked)
-	{
-	    var j = parseInt(id)+1;
-	    var n = document.getElementById("pane"+j);
-	    // alert(n + j);
-	    while (n && n.pane.done.checked) 
-	    {
-		++j;
-		n = document.getElementById("pane"+j);
-	    }
-	    if (n) window.location.hash="atpane"+j;
-	    if (bitext) bitext.save();
-	}
+	      var msg = (this.button.checked 
+		               ? "Revert status to 'in progress'?" 
+		               : "Change status to 'done'?");
+	      // if (window.confirm(msg))
+	      // {
+	      changed = true;
+	      if (bitext) bitext.saveButton.enable();
+	      this.button.box.nodeValue = String.fromCharCode(parseInt(this.button.checked 
+								                                                 ? 2610 : 2611,16));
+	      this.button.checked = !this.button.checked;
+	      if (this.button.checked)
+	      {
+	          var j = parseInt(id)+1;
+	          var n = document.getElementById("pane"+j);
+	          // alert(n + j);
+	          while (n && n.pane.done.checked) 
+	          {
+		            ++j;
+		            n = document.getElementById("pane"+j);
+	          }
+	          if (n) window.location.hash="atpane"+(j);
+	          if (bitext) bitext.save();
+	      }
     }
 }
 
@@ -109,45 +109,46 @@ function Pane(E,F,A,id,done,extraA,extraB)
    var agrps = A.split(' ');
    if (agrps.length > 0)
    {
-      for (var a in agrps)
-      {
-	 var foo = agrps[a].split(':');
-	 if (foo.length < 3) break;
-	 var ewrds = foo[0].length > 0 ? foo[0].split(',') : null;
-	 var fwrds = foo[1].length > 0 ? foo[1].split(',') : null;
-	 var ag = new AGroup(this);
-	 
-	 // Error.write(foo[0] + ' x ' + ewrds[1] + ' + ' +foo[2]);
-         // log("["+this.id + "] "+ ewrds + ' + ' +fwrds + " ::: " + this.E.words.length + " / " + this.F.words.length);
-	 if (ewrds)
-	    for (var e in ewrds) 
-	       ag.addWord(this.E.words[parseInt(ewrds[e])]);
-	 if (fwrds)
-	    for (var f in fwrds) 
-	       ag.addWord(this.F.words[parseInt(fwrds[f])]);
-	 ag.label = foo[2]; 
-	 ag.unhighlight();
-      }
+       for (var a in agrps)
+       {
+	         var foo = agrps[a].split(':');
+	         if (foo.length < 3) break;
+	         var ewrds = foo[0].length > 0 ? foo[0].split(',') : null;
+	         var fwrds = foo[1].length > 0 ? foo[1].split(',') : null;
+	         var ag = new AGroup(this);
+	         
+	         // Error.write(foo[0] + ' x ' + ewrds[1] + ' + ' +foo[2]);
+           // log("["+this.id + "] "+ ewrds + ' + ' +fwrds + " ::: " + this.E.words.length + " / " + this.F.words.length);
+	         if (ewrds)
+	             for (var e in ewrds) 
+	                 ag.addWord(this.E.words[parseInt(ewrds[e])]);
+	         if (fwrds)
+	             for (var f in fwrds) 
+	                 ag.addWord(this.F.words[parseInt(fwrds[f])]);
+	         ag.label = foo[2]; 
+	         ag.unhighlight();
+       }
    }
-
-   // secondary alignment for diff-ing
-   // log("xxx "+extraA);
-   // log("yyy "+extraB);
-   if (extraA != null)
-   {
-      this.shadowAlignmentA = extraA;
-   }
-   if (extraB != null)
-   {
+    
+    // secondary alignment for diff-ing
+    // log("xxx "+extraA);
+    // log("yyy "+extraB);
+    if (extraA != null)
+    {
+        this.shadowAlignmentA = extraA;
+    }
+    if (extraB != null)
+    {
       // alert(extraB);
-      this.shadowAlignmentB = extraB;
-   }
-    var a = document.createElement("anchor");
-    a.name = "atpane"+id;
-    a.id   = "atpane"+id;
-    a.style.position.relative;
-    a.style.paddingTop = "30px";
-    this.div.insertBefore(a,this.div.firstChild);
+        this.shadowAlignmentB = extraB;
+    }
+    // var a = document.createElement("anchor");
+    // a.name = "atpane"+id;
+    // a.id   = "atpane"+id;
+    // a.style.position.relative;
+    // a.style.display = 'block';
+    // a.style.marginTop = "-60px";
+    // this.div.insertBefore(a,this.div.firstChild);
     this.div.id = "pane"+id;
 }
 
@@ -213,12 +214,12 @@ Pane.prototype.pack = function()
    {
       if (this.E.words[e].agroup)
       {
-	 var foo = this.E.words[e].agroup.pack();
-	 if (!done[foo]) 
-	 {
-	    retval += ' '+foo;
-	    done[foo] = true;
-	 }
+	        var foo = this.E.words[e].agroup.pack();
+	        if (!done[foo]) 
+	        {
+	            retval += ' '+foo;
+	            done[foo] = true;
+	        }
       }
 
    }
@@ -226,12 +227,12 @@ Pane.prototype.pack = function()
    {
       if (this.F.words[f].agroup)
       {
-	 var foo = this.F.words[f].agroup.pack();
-	 if (!done[foo])
-	 {
-	    retval += ' '+foo;
-	    done[foo] = true;
-	 }
+	        var foo = this.F.words[f].agroup.pack();
+	        if (!done[foo])
+	        {
+	            retval += ' '+foo;
+	            done[foo] = true;
+	        }
       }
    }
    // retval += ' STATUS=' 
