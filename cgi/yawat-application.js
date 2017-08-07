@@ -127,8 +127,12 @@ function BiText(id,title,data,prevSid,curSid,nextSid)
    this.footer.right.appendChild(document.createTextNode(copyRightNotice));
    this.footer.right.style.fontSize = '8pt';
 
-   // set up the bitext body
-   this.body.style.marginTop = '25pt'; // this.toolbar.offsetHeight;
+    // set up the bitext body
+    this.body.style.display = 'block';
+    // this.body.style.position = 'fixed';
+    // this.body.style.overflow = "scroll";
+    this.body.style.paddingTop = "50px"; //this.toolbar.offsetHeight;
+    // this.body.style.marginBottom = "-35px"; //this.toolbar.offsetHeight;
 
    var h1 = document.createElement('h1');
    h1.align='center';
@@ -157,7 +161,15 @@ function BiText(id,title,data,prevSid,curSid,nextSid)
       p.bitext = this;
 
        // this.body.appendChild(anchor);
-       
+
+       var a = document.createElement("anchor");
+       a.name = "atpane"+item[0];
+       a.id   = "atpane"+item[0];
+       a.style.display = 'block';
+       a.style.position.relative;
+       // a.style.marginBottom = "35px";
+       this.body.append(a);
+
        this.body.appendChild(p.div);
        if (firstUnFinished == 0 && !item[1])
 	   firstUnFinished = item[0];

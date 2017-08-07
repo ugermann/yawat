@@ -23,7 +23,11 @@ var leftMouseButton  = Netscape ? 1 : 1;
 var rightMouseButton = Netscape ? 3 : 2;
 // Opera codes to be added 
 
-var SHIFT_key = 16;
+var SHIFT_key = "Shift";
+var CTRL_key  = "Control";
+var ESC_key   = "Escape";
+// var CAPS_LOCK = ";
+var DEL_key   = "Delete";
 
 var AlignmentProtocol;
 
@@ -48,15 +52,16 @@ var isDown = new Object();
 window.onkeydown = function(e)
 {
     if (!e) e = windown.event;
-    if (e.keyCode in isDown) ++isDown[e.keyCode];
-    else isDown[e.keyCode] = 1;
-    if (e.keyCode == DEL_key)
+    // alert(e.key);
+    if (e.key in isDown) ++isDown[e.key];
+    else isDown[e.key] = 1;
+    if (e.key == "Delete")
     {
         var x = document.getElementById('log');
         if (x) x.value='';
 
     }
-    if (e.keyCode == ESC_key)
+    if (e.key == "Escape")
     {
         if (currentCTM)
             cancelOpenContextMenus(null);
@@ -64,16 +69,16 @@ window.onkeydown = function(e)
             activeLayer.popSeln();
         return false;
     }
-    else
+    else 
     {
-        log('key down event:' + e.keyCode);
+        log('key down event:' + e.key);
     }
 }
 
 window.onkeyup = function(e)
 {
     if (!e) e = windown.event;
-    --isDown[e.keyCode];
+    --isDown[e.key];
 }
 
 // Important note about event handling: I do it top-down, with a 
@@ -123,6 +128,7 @@ function handleClick(evt)
    }
    else if (target.word)
    {
+       // alert(isDown[SHIFT_key]);
        if (readOnlyMode)
            return false; // do nothing
        if (button == rightMouseButton || isDown[SHIFT_key])
@@ -154,8 +160,8 @@ window.onmousedown=function(){ return false;}
 
 function log(text)
 {
-   var log = document.getElementById('log');
-   log.value += text+"\n";
+    var log = document.getElementById('log');
+    if (log) log.value += text+"\n";
 }
 
 function protocol(text)
