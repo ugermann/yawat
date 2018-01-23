@@ -27,7 +27,7 @@ This software is under the [GNU Affero General Public License v3.0](LICENSE)
    yawat.add-user.perl takes two command line arguments: user name and
    password. 
 
-   % ./admin/yawat.add-user.perl <user name> <password> >> \<password file>
+   % ./admin/yawat.add-user.perl \<user name> \<password> >> \<password file>
 
    The password file currently contains a demo account with login
    'demo' and password 'demo'.
