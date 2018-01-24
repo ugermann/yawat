@@ -94,7 +94,7 @@ if (!$annotator)
   foreach my $line (<PASSWD>)
   {
     chomp $line;
-    my ($who,$pw) = split /:/, $line;
+    my ($who,$pw) = split / /, $line;
     next if ($who ne $login || crypt($q->param('passwd'),$pw) ne $pw);
     $cookie = $q->cookie(-name=>"yawat-login", -value=>"$login");
     last;
