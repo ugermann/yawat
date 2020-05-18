@@ -55,7 +55,7 @@ This software is under the [GNU Affero General Public License v3.0](LICENSE)
       ```
       
    2. A .aln file with alignment data. For each sentence pair, there
-      is one lineconsisting of the sentence id followed by entries defining 
+      is one line consisting of the sentence id followed by entries defining 
       groups of aligned words:
       <words in sentence A>:<words in sentence B>:<label> 
  
